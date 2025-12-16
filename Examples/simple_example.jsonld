@@ -1,0 +1,39 @@
+[
+  {
+    "@context": {
+      "ex": "http://example.org/",
+      "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+    },
+    "@id": "ex:Alice",
+    "rdfs:label": "Alice",
+    "ex:age": 25,
+    "ex:knows": {
+      "@id": "ex:Bob"
+    }
+  },
+  {
+    "@context": {
+      "ex": "http://example.org/",
+      "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+    },
+    "@id": "ex:Bob",
+    "rdfs:label": "Bob",
+    "ex:age": 30,
+    "ex:worksAt": {
+      "@id": "ex:Company"
+    }
+  },
+  {
+    "@context": {
+      "ex": "http://example.org/",
+      "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+    },
+    "@id": "ex:Company",
+    "rdfs:label": "TechCorp",
+    "ex:hasEmployee": {
+      "@id": "ex:Bob"
+    }
+  }
+]
+
+

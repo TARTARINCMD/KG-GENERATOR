@@ -1,0 +1,39 @@
+[
+  { "data": { "id": "ServerA", "label": "ServerA", "color": "#87cefa", "size": 30 } },
+  { "data": { "id": "ServerB", "label": "ServerB", "color": "#87cefa", "size": 30 } },
+  { "data": { "id": "ServiceX", "label": "ServiceX", "color": "#87cefa", "size": 30 } },
+  { "data": { "id": "ServiceY", "label": "ServiceY", "color": "#87cefa", "size": 30 } },
+  { "data": { "id": "Database1", "label": "Database1", "color": "#87cefa", "size": 30 } },
+  { "data": { "id": "Database2", "label": "Database2", "color": "#87cefa", "size": 30 } },
+
+  { "data": { "id": "Alice", "label": "Alice", "color": "#87cefa", "size": 30 } },
+  { "data": { "id": "Bob", "label": "Bob", "color": "#87cefa", "size": 30 } },
+  { "data": { "id": "Carol", "label": "Carol", "color": "#87cefa", "size": 30 } },
+
+  { "data": { "id": "CityX", "label": "CityX", "color": "#87cefa", "size": 30 } },
+  { "data": { "id": "DeptEng", "label": "DeptEng", "color": "#87cefa", "size": 30 } },
+  { "data": { "id": "ProjectAlpha", "label": "ProjectAlpha", "color": "#87cefa", "size": 30 } },
+
+  { "data": { "id": "ServiceX-ServerA-runs_on", "source": "ServiceX", "target": "ServerA", "label": "runs_on" } },
+  { "data": { "id": "ServiceY-ServerB-runs_on", "source": "ServiceY", "target": "ServerB", "label": "runs_on" } },
+  { "data": { "id": "ServiceX-Database1-depends_on", "source": "ServiceX", "target": "Database1", "label": "depends_on" } },
+  { "data": { "id": "ServiceY-Database1-depends_on", "source": "ServiceY", "target": "Database1", "label": "depends_on" } },
+  { "data": { "id": "ServiceY-Database2-depends_on", "source": "ServiceY", "target": "Database2", "label": "depends_on" } },
+
+  { "data": { "id": "Alice-DeptEng-member_of", "source": "Alice", "target": "DeptEng", "label": "member_of" } },
+  { "data": { "id": "Bob-DeptEng-member_of", "source": "Bob", "target": "DeptEng", "label": "member_of" } },
+  { "data": { "id": "Carol-DeptEng-member_of", "source": "Carol", "target": "DeptEng", "label": "member_of" } },
+
+  { "data": { "id": "Alice-Bob-friend_of", "source": "Alice", "target": "Bob", "label": "friend_of" } },
+  { "data": { "id": "Bob-Carol-friend_of", "source": "Bob", "target": "Carol", "label": "friend_of" } },
+
+  { "data": { "id": "ServerA-CityX-located_in", "source": "ServerA", "target": "CityX", "label": "located_in" } },
+  { "data": { "id": "ServerB-CityX-located_in", "source": "ServerB", "target": "CityX", "label": "located_in" } },
+
+  { "data": { "id": "ServiceX-ProjectAlpha-part_of", "source": "ServiceX", "target": "ProjectAlpha", "label": "part_of" } },
+  { "data": { "id": "ServiceY-ProjectAlpha-part_of", "source": "ServiceY", "target": "ProjectAlpha", "label": "part_of" } },
+
+  { "data": { "id": "Database1-Database2-replicates_to", "source": "Database1", "target": "Database2", "label": "replicates_to" } },
+  { "data": { "id": "Alice-ServiceX-works_on", "source": "Alice", "target": "ServiceX", "label": "works_on" } },
+  { "data": { "id": "Bob-ServiceY-works_on", "source": "Bob", "target": "ServiceY", "label": "works_on" } }
+]

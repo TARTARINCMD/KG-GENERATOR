@@ -1,0 +1,202 @@
+[
+  {
+    "data": {
+      "id": "A",
+      "label": "A",
+      "color": "#87cefa",
+      "size": 30
+    }
+  },
+  {
+    "data": {
+      "id": "B",
+      "label": "B",
+      "color": "#87cefa",
+      "size": 30
+    }
+  },
+  {
+    "data": {
+      "id": "C",
+      "label": "C",
+      "color": "#87cefa",
+      "size": 30
+    }
+  },
+  {
+    "data": {
+      "id": "D",
+      "label": "D",
+      "color": "#87cefa",
+      "size": 30
+    }
+  },
+  {
+    "data": {
+      "id": "E",
+      "label": "E",
+      "color": "#87cefa",
+      "size": 30
+    }
+  },
+  {
+    "data": {
+      "id": "F",
+      "label": "F",
+      "color": "#87cefa",
+      "size": 30
+    }
+  },
+  {
+    "data": {
+      "id": "G",
+      "label": "G",
+      "color": "#87cefa",
+      "size": 30
+    }
+  },
+  {
+    "data": {
+      "id": "H",
+      "label": "H",
+      "color": "#87cefa",
+      "size": 30
+    }
+  },
+  {
+    "data": {
+      "id": "I",
+      "label": "I",
+      "color": "#87cefa",
+      "size": 30
+    }
+  },
+  {
+    "data": {
+      "id": "J",
+      "label": "J",
+      "color": "#87cefa",
+      "size": 30
+    }
+  },
+  {
+    "data": {
+      "id": "A-B",
+      "source": "A",
+      "target": "B",
+      "label": "r"
+    }
+  },
+  {
+    "data": {
+      "id": "B-C",
+      "source": "B",
+      "target": "C",
+      "label": "r"
+    }
+  },
+  {
+    "data": {
+      "id": "C-D",
+      "source": "C",
+      "target": "D",
+      "label": "r"
+    }
+  },
+  {
+    "data": {
+      "id": "D-E",
+      "source": "D",
+      "target": "E",
+      "label": "r"
+    }
+  },
+  {
+    "data": {
+      "id": "E-F",
+      "source": "E",
+      "target": "F",
+      "label": "r"
+    }
+  },
+  {
+    "data": {
+      "id": "F-G",
+      "source": "F",
+      "target": "G",
+      "label": "r"
+    }
+  },
+  {
+    "data": {
+      "id": "G-H",
+      "source": "G",
+      "target": "H",
+      "label": "r"
+    }
+  },
+  {
+    "data": {
+      "id": "H-I",
+      "source": "H",
+      "target": "I",
+      "label": "r"
+    }
+  },
+  {
+    "data": {
+      "id": "I-J",
+      "source": "I",
+      "target": "J",
+      "label": "r"
+    }
+  },
+  {
+    "data": {
+      "id": "A-F",
+      "source": "A",
+      "target": "F",
+      "label": "r"
+    }
+  },
+  {
+    "data": {
+      "id": "B-G",
+      "source": "B",
+      "target": "G",
+      "label": "r"
+    }
+  },
+  {
+    "data": {
+      "id": "C-H",
+      "source": "C",
+      "target": "H",
+      "label": "r"
+    }
+  },
+  {
+    "data": {
+      "id": "D-I",
+      "source": "D",
+      "target": "I",
+      "label": "r"
+    }
+  },
+  {
+    "data": {
+      "id": "E-J",
+      "source": "E",
+      "target": "J",
+      "label": "r"
+    }
+  },
+  {
+    "data": {
+      "id": "A-J",
+      "source": "A",
+      "target": "J",
+      "label": "r"
+    }
+  }
+]

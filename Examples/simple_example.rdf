@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:ex="http://example.org/">
+
+  <!-- Simple Example 1: Person and their name -->
+  <rdf:Description rdf:about="http://example.org/Alice">
+    <rdfs:label>Alice</rdfs:label>
+    <ex:age>25</ex:age>
+    <ex:knows rdf:resource="http://example.org/Bob"/>
+  </rdf:Description>
+
+  <!-- Simple Example 2: Another person -->
+  <rdf:Description rdf:about="http://example.org/Bob">
+    <rdfs:label>Bob</rdfs:label>
+    <ex:age>30</ex:age>
+    <ex:worksAt rdf:resource="http://example.org/Company"/>
+  </rdf:Description>
+
+  <!-- Simple Example 3: Company -->
+  <rdf:Description rdf:about="http://example.org/Company">
+    <rdfs:label>TechCorp</rdfs:label>
+    <ex:hasEmployee rdf:resource="http://example.org/Bob"/>
+  </rdf:Description>
+
+</rdf:RDF>
+
+
