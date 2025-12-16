@@ -1,0 +1,18 @@
+[
+  { "data": { "id": "Inception", "label": "Inception", "color": "#87cefa", "size": 30 } },
+  { "data": { "id": "Interstellar", "label": "Interstellar", "color": "#87cefa", "size": 30 } },
+
+  { "data": { "id": "Leonardo DiCaprio", "label": "Leonardo DiCaprio", "color": "#87cefa", "size": 30 } },
+  { "data": { "id": "Joseph Gordon-Levitt", "label": "Joseph Gordon-Levitt", "color": "#87cefa", "size": 30 } },
+  { "data": { "id": "Elliot Page", "label": "Elliot Page", "color": "#87cefa", "size": 30 } },
+
+  { "data": { "id": "Matthew McConaughey", "label": "Matthew McConaughey", "color": "#87cefa", "size": 30 } },
+  { "data": { "id": "Anne Hathaway", "label": "Anne Hathaway", "color": "#87cefa", "size": 30 } },
+
+  { "data": { "id": "Leonardo DiCaprio-Inception", "source": "Leonardo DiCaprio", "target": "Inception", "label": "starred in" } },
+  { "data": { "id": "Joseph Gordon-Levitt-Inception", "source": "Joseph Gordon-Levitt", "target": "Inception", "label": "starred in" } },
+  { "data": { "id": "Elliot Page-Inception", "source": "Elliot Page", "target": "Inception", "label": "starred in" } },
+
+  { "data": { "id": "Matthew McConaughey-Interstellar", "source": "Matthew McConaughey", "target": "Interstellar", "label": "starred in" } },
+  { "data": { "id": "Anne Hathaway-Interstellar", "source": "Anne Hathaway", "target": "Interstellar", "label": "starred in" } }
+]

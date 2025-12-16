@@ -1,0 +1,9 @@
+dash>=2.14.0
+dash-cytoscape>=0.3.0
+pandas>=1.5.0
+rdflib>=6.0.0
+networkx>=2.8.0
+scikit-learn>=1.0.0
+numpy>=1.21.0
+
+
