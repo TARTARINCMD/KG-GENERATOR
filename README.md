@@ -1,4 +1,4 @@
-# Knowledge Graph Visualization Tool :D
+# Knowledge Graph Visualization Tool :DD
 
 A web-based application for creating, editing, and visualizing knowledge graphs using Dash and Cytoscape.js.
 
