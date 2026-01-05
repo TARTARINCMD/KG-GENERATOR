@@ -753,6 +753,71 @@ app.layout = html.Div([
                      'justifyContent': 'center'
                  }),
                  
+                 # Node Deletion Warning Modal
+                 html.Div([
+                     html.Div([
+                         html.H4("⚠️ Warning: Graph Disconnection", style={
+                             'color': '#e74c3c',
+                             'marginBottom': '15px',
+                             'fontWeight': '600'
+                         }),
+                         html.P(id='node-delete-warning-text', style={
+                             'color': '#666',
+                             'marginBottom': '20px'
+                         }),
+                         html.P("This action will disconnect the graph into multiple components. Do you want to continue?", style={
+                             'color': '#666',
+                             'marginBottom': '20px',
+                             'fontStyle': 'italic'
+                         }),
+                         html.Div([
+                             html.Button('Cancel', id='cancel-node-delete', style={
+                                 'backgroundColor': '#95a5a6',
+                                 'color': 'white',
+                                 'border': 'none',
+                                 'padding': '8px 16px',
+                                 'borderRadius': '4px',
+                                 'cursor': 'pointer',
+                                 'marginRight': '10px',
+                                 'fontSize': '14px'
+                             }),
+                             html.Button('Delete Anyway', id='confirm-node-delete', style={
+                                 'backgroundColor': '#e74c3c',
+                                 'color': 'white',
+                                 'border': 'none',
+                                 'padding': '8px 16px',
+                                 'borderRadius': '4px',
+                                 'cursor': 'pointer',
+                                 'fontSize': '14px'
+                             })
+                         ], style={'textAlign': 'right'})
+                     ], style={
+                         'backgroundColor': 'white',
+                         'padding': '20px',
+                         'borderRadius': '8px',
+                         'boxShadow': '0 4px 12px rgba(0,0,0,0.3)',
+                         'maxWidth': '450px',
+                         'margin': 'auto'
+                     })
+                 ], id='node-delete-warning-modal', style={
+                     'position': 'fixed',
+                     'top': '0',
+                     'left': '0',
+                     'width': '100%',
+                     'height': '100%',
+                     'backgroundColor': 'rgba(0,0,0,0.5)',
+                     'display': 'none',
+                     'zIndex': 2000,
+                     'alignItems': 'center',
+                     'justifyContent': 'center'
+                 }),
+                 
+                 # Store selected node for deletion
+                 dcc.Store(id='pending-delete-node', data=None),
+                 
+                 # Store selected edge data for editing
+                 dcc.Store(id='selected-edge-store', data=None),
+                 
                  dcc.Download(id='download-nodes-csv'),
                  dcc.Download(id='download-edges-csv'),
                  dcc.Download(id='download-json'),
@@ -1182,19 +1247,20 @@ app.layout = html.Div([
             'display': 'none'
         }),
         
+        # Edge edit backdrop (outside window container)
+        html.Div(id='edge-edit-backdrop', style={
+            'position': 'fixed',
+            'top': '0',
+            'left': '0',
+            'width': '100%',
+            'height': '100%',
+            'backgroundColor': 'transparent',
+            'zIndex': 998,
+            'display': 'none'
+        }),
+        
         # Edge edit window
         html.Div([
-            # click-outside-to-close
-            html.Div(id='edge-edit-backdrop', style={
-                'position': 'fixed',
-                'top': '0',
-                'left': '0',
-                'width': '100%',
-                'height': '100%',
-                'backgroundColor': 'transparent',
-                'zIndex': 999,
-                'display': 'none'
-            }),
             html.Div([
                 html.Div([
                     html.H3("Edit Edge", style={'margin': '0', 'color': '#333', 'flex': '1'}),
@@ -1240,15 +1306,13 @@ app.layout = html.Div([
                 'padding': '20px',
                 'boxShadow': '0 4px 12px rgba(0,0,0,0.15)',
                 'minWidth': '250px',
-                'maxWidth': '300px',
-                'maxHeight': '80vh',
-                'overflowY': 'auto'
+                'maxWidth': '300px'
             })
         ], id='edge-edit-window', style={
             'position': 'absolute',
             'top': '10px',
             'left': '10px',
-            'zIndex': 1000,
+            'zIndex': 9999,
             'display': 'none'
         })
     ], id='graph-container', style={'position': 'relative', 'width': '100%'})
@@ -1387,6 +1451,54 @@ def auto_hide_modal(n_intervals):
         }, True
     return dash.no_update, dash.no_update
 
+# Helper function to check if deleting a node would disconnect the graph
+def would_disconnect_graph(elements, node_id):
+    """
+    Check if deleting a node would disconnect the graph.
+    Returns True if deletion would create multiple disconnected components.
+    """
+    if not elements:
+        return False
+    
+    # Create NetworkX graph from ALL elements (before deletion)
+    G_original = nx.Graph()
+    for el in elements:
+        if 'source' not in el['data']:  # It's a node
+            G_original.add_node(el['data']['id'])
+        else:  # It's an edge
+            G_original.add_edge(el['data']['source'], el['data']['target'])
+    
+    # Count components in original graph
+    original_components = nx.number_connected_components(G_original)
+    
+    # Create NetworkX graph after deletion (without the node and its edges)
+    G_after = nx.Graph()
+    
+    # Add nodes (excluding the node to be deleted)
+    for el in elements:
+        if 'source' not in el['data']:  # It's a node
+            n_id = el['data']['id']
+            if n_id != node_id:
+                G_after.add_node(n_id)
+    
+    # Add edges (excluding edges connected to the node to be deleted)
+    for el in elements:
+        if 'source' in el['data']:  # It's an edge
+            source = el['data']['source']
+            target = el['data']['target']
+            if source != node_id and target != node_id:
+                G_after.add_edge(source, target)
+    
+    if G_after.number_of_nodes() == 0:
+        return False  # No nodes left, can't be disconnected
+    
+    # Count connected components after deletion
+    after_components = nx.number_connected_components(G_after)
+    
+    # Warn if deletion would increase the number of components
+    # (i.e., if a connected graph becomes disconnected, or if it creates more disconnected parts)
+    return after_components > original_components
+
 # Insert, Delete All, Import, Auto-update node/edge 
 @app.callback(
     Output('cytoscape-graph', 'elements'),
@@ -1397,34 +1509,32 @@ def auto_hide_modal(n_intervals):
      Input('node-color-dropdown', 'value'),
      Input('node-label-input', 'value'),
      Input('node-size-slider', 'value'),
-     Input('edge-label-input', 'value')],
+     Input('edge-label-input', 'value'),
+     Input('confirm-node-delete', 'n_clicks')],
     [State('node1-input', 'value'),
      State('node2-input', 'value'),
      State('relationship-input', 'value'),
      State('cytoscape-graph', 'elements'),
      State('cytoscape-graph', 'tapNode'),
-     State('cytoscape-graph', 'tapEdge')],
+     State('cytoscape-graph', 'tapEdge'),
+     State('pending-delete-node', 'data'),
+     State('selected-edge-store', 'data')],
     prevent_initial_call=True
 )
 def update_graph(add_clicks, delete_node_clicks, delete_edge_clicks, hide_clicks, new_color, new_label, new_size, new_edge_label,
-                 node1, node2, relationship, elements, selected_node, selected_edge):
+                 confirm_delete_clicks, node1, node2, relationship, elements, selected_node, selected_edge, pending_delete_node, stored_edge):
     ctx = dash.callback_context
     if not ctx.triggered:
         return elements or []
     
     button_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
-    
-    if button_id == 'delete-node-button':
-
-        # Delete the selected node and all its connected edges
-        if not selected_node or not elements:
+    # Handle confirmed node deletion (after warning)
+    if button_id == 'confirm-node-delete':
+        if not pending_delete_node or not elements:
             return elements or []
         
-        node_id = selected_node.get('data', {}).get('id')
-        if not node_id:
-            return elements or []
-        
+        node_id = pending_delete_node
         # Remove the node and all edges connected to it
         new_elements = []
         for element in elements:
@@ -1439,18 +1549,59 @@ def update_graph(add_clicks, delete_node_clicks, delete_edge_clicks, hide_clicks
                     new_elements.append(node_element)
         
         return new_elements
-    elif button_id == 'delete-edge-button':
-        if not selected_edge or not elements:
+    
+    if button_id == 'delete-node-button':
+        # Delete the selected node and all its connected edges
+        if not selected_node or not elements:
             return elements or []
         
-        edge_id = selected_edge.get('data', {}).get('id')
-        if not edge_id:
+        node_id = selected_node.get('data', {}).get('id')
+        if not node_id:
             return elements or []
+        
+        # Check if deletion would disconnect the graph
+        # If yes, don't delete yet - the warning modal callback will show the warning
+        # and store the node_id in pending-delete-node
+        if would_disconnect_graph(elements, node_id):
+            # Return no_update to prevent deletion, modal callback will handle showing the warning
+            return dash.no_update
+        
+        # Safe to delete - proceed with deletion immediately
+        new_elements = []
+        for element in elements:
+            if element['data'].get('id') != node_id:  
+                if 'source' in element['data']:  
+                    if element['data']['source'] != node_id and element['data']['target'] != node_id:
+                        new_elements.append(element)
+                else:  
+                    node_element = element.copy()
+                    if 'position' in element:
+                        node_element['position'] = element['position']
+                    new_elements.append(node_element)
+        
+        return new_elements
+    elif button_id == 'delete-edge-button':
+        # Use stored_edge if selected_edge is not available (e.g., after input changes)
+        edge_to_delete = selected_edge if selected_edge else stored_edge
+        if not edge_to_delete or not elements:
+            return elements or []
+        
+        edge_data = edge_to_delete.get('data', {})
+        edge_id = edge_data.get('id')
+        source = edge_data.get('source')
+        target = edge_data.get('target')
         
         new_elements = []
         for element in elements:
-            if element['data'].get('id') != edge_id:
-                new_elements.append(element)
+            # Delete by ID if available
+            if edge_id and element['data'].get('id') == edge_id:
+                continue  # Skip this edge
+            # Or delete by source/target match
+            elif source and target and 'source' in element['data']:
+                if element['data'].get('source') == source and element['data'].get('target') == target:
+                    continue  # Skip this edge
+            # Keep all other elements
+            new_elements.append(element)
         
         return new_elements
     elif button_id == 'add-button':
@@ -1490,14 +1641,29 @@ def update_graph(add_clicks, delete_node_clicks, delete_edge_clicks, hide_clicks
         
         return new_elements
     elif button_id == 'edge-label-input':
-        if not selected_edge or not elements:
+        # Use stored_edge if selected_edge is not available (e.g., after input changes)
+        edge_to_update = selected_edge if selected_edge else stored_edge
+        if not edge_to_update or not elements:
+            return elements or []
+        
+        edge_data = edge_to_update.get('data', {})
+        source = edge_data.get('source')
+        target = edge_data.get('target')
+        edge_id = edge_data.get('id')
+        
+        if not source or not target:
             return elements or []
         
         new_elements = elements.copy()
         for element in new_elements:
-            if (element['data'].get('source') == selected_edge.get('data', {}).get('source') and 
-                element['data'].get('target') == selected_edge.get('data', {}).get('target')):
-                if new_edge_label:
+            # Match by ID first, then by source/target
+            if edge_id and element['data'].get('id') == edge_id:
+                if new_edge_label is not None:
+                    element['data']['label'] = new_edge_label
+                break
+            elif (element['data'].get('source') == source and 
+                  element['data'].get('target') == target):
+                if new_edge_label is not None:
                     element['data']['label'] = new_edge_label
                 break
         
@@ -1660,7 +1826,76 @@ def close_window_after_delete(delete_clicks, selected_node):
         }
     return dash.no_update
 
+# Callback to show/hide node deletion warning modal
+@app.callback(
+    [Output('node-delete-warning-modal', 'style'),
+     Output('pending-delete-node', 'data'),
+     Output('node-delete-warning-text', 'children')],
+    [Input('delete-node-button', 'n_clicks'),
+     Input('cancel-node-delete', 'n_clicks'),
+     Input('confirm-node-delete', 'n_clicks')],
+    [State('cytoscape-graph', 'tapNode'),
+     State('cytoscape-graph', 'elements')],
+    prevent_initial_call=True,
+    suppress_callback_exceptions=True
+)
+def toggle_node_delete_warning(delete_clicks, cancel_clicks, confirm_clicks, selected_node, elements):
+    ctx = dash.callback_context
+    if not ctx.triggered:
+        return {'display': 'none'}, None, ""
+    
+    button_id = ctx.triggered[0]['prop_id'].split('.')[0]
+    
+    if button_id == 'delete-node-button':
+        if not selected_node or not elements:
+            return {'display': 'none'}, None, ""
+        
+        node_id = selected_node.get('data', {}).get('id')
+        if not node_id:
+            return {'display': 'none'}, None, ""
+        
+        # Check if deletion would disconnect the graph
+        if would_disconnect_graph(elements, node_id):
+            # Get node label for display
+            node_label = selected_node.get('data', {}).get('label', node_id)
+            warning_text = f"Deleting node '{node_label}' will disconnect the graph into multiple components."
+            
+            return {
+                'position': 'fixed',
+                'top': '0',
+                'left': '0',
+                'width': '100%',
+                'height': '100%',
+                'backgroundColor': 'rgba(0,0,0,0.5)',
+                'display': 'flex',
+                'zIndex': 2000,
+                'alignItems': 'center',
+                'justifyContent': 'center'
+            }, node_id, warning_text
+    
+    # Hide modal on cancel or confirm
+    elif button_id in ['cancel-node-delete', 'confirm-node-delete']:
+        return {'display': 'none'}, None, ""
+    
+    return {'display': 'none'}, None, ""
 
+# Close node edit window when node deletion is confirmed
+@app.callback(
+    Output('node-edit-window', 'style', allow_duplicate=True),
+    Input('confirm-node-delete', 'n_clicks'),
+    prevent_initial_call=True,
+    suppress_callback_exceptions=True
+)
+def close_window_after_confirm_delete(confirm_clicks):
+    if confirm_clicks:
+        return {
+            'position': 'absolute',
+            'top': '10px',
+            'left': '10px',
+            'zIndex': 1000,
+            'display': 'none'
+        }
+    return dash.no_update
 
 # Debug for color dropdown
 @app.callback(
@@ -1758,6 +1993,31 @@ def update_edge_label_input(edge_data):
     if edge_data:
         return edge_data.get('data', {}).get('label', '')
     return ''
+
+# Store selected edge data for editing
+@app.callback(
+    Output('selected-edge-store', 'data'),
+    [Input('cytoscape-graph', 'tapEdge'),
+     Input('close-edge-window', 'n_clicks'),
+     Input('delete-edge-button', 'n_clicks')],
+    prevent_initial_call=True
+)
+def store_selected_edge(edge_data, close_clicks, delete_clicks):
+    ctx = dash.callback_context
+    if not ctx.triggered:
+        return None
+    
+    button_id = ctx.triggered[0]['prop_id'].split('.')[0]
+    
+    # Clear store when window is closed or edge is deleted
+    if button_id in ['close-edge-window', 'delete-edge-button']:
+        return None
+    
+    # Store edge when clicked
+    if edge_data:
+        return edge_data
+    
+    return None
 
 @app.callback(
     Output('node-size-slider', 'value'),
@@ -2064,7 +2324,7 @@ def toggle_edge_edit_window(edge_data, close_clicks, delete_clicks, node_data):
             'position': 'absolute',
             'top': f'{window_y}px',
             'left': f'{window_x}px',
-            'zIndex': 1000,
+            'zIndex': 9999,
             'display': 'block'
         }
     else:
@@ -2282,19 +2542,22 @@ def toggle_node_edit_backdrop(node_data, close_clicks, edge_data):
     [Input('cytoscape-graph', 'tapEdge'),
      Input('close-edge-window', 'n_clicks'),
      Input('delete-edge-button', 'n_clicks'),
-     Input('cytoscape-graph', 'tapNode')]
+     Input('cytoscape-graph', 'tapNode'),
+     Input('edge-edit-backdrop', 'n_clicks')]
 )
-def toggle_edge_edit_backdrop(edge_data, close_clicks, delete_clicks, node_data):
+def toggle_edge_edit_backdrop(edge_data, close_clicks, delete_clicks, node_data, backdrop_clicks):
     ctx = dash.callback_context
     if not ctx.triggered:
         return {'display': 'none'}
     
     button_id = ctx.triggered[0]['prop_id'].split('.')[0]
     
-    if button_id in ['close-edge-window', 'delete-edge-button']:
+    # Hide backdrop when window is closed, backdrop is clicked, or node is clicked
+    if button_id in ['close-edge-window', 'delete-edge-button', 'edge-edit-backdrop']:
         return {'display': 'none'}
     elif button_id == 'cytoscape-graph' and 'tapNode' in ctx.triggered[0]['prop_id']:
         return {'display': 'none'}
+    # Show backdrop when edge is clicked
     elif edge_data is not None:
         return {
             'position': 'fixed',
@@ -2303,11 +2566,11 @@ def toggle_edge_edit_backdrop(edge_data, close_clicks, delete_clicks, node_data)
             'width': '100%',
             'height': '100%',
             'backgroundColor': 'transparent',
-            'zIndex': 999,
+            'zIndex': 998,
             'display': 'block'
         }
-    else:
-        return {'display': 'none'}
+    # Default: hide backdrop
+    return {'display': 'none'}
 
 # Callback to update hide button
 @app.callback(
