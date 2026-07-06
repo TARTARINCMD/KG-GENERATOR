@@ -21,405 +21,12 @@ app.index_string = '''
 <html>
     <head>
         {%metas%}
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{%title%}</title>
         {%favicon%}
         {%css%}
         <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:wght@300;400;500;600;700&display=swap" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-        <link href="https://use.fontawesome.com/releases/v6.4.0/css/all.css" rel="stylesheet">
-
-        <style>
-            * {
-                font-family: "Red Hat Text", sans-serif !important;
-            }
-            
-            /* Export dropdown styling */
-            .export-dropdown .Select-control {
-                background-color: transparent !important;
-                border: 2px solid rgba(255,255,255,0.3) !important;
-                border-radius: 8px !important;
-                min-height: 45px !important;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-                transition: all 0.3s ease !important;
-                position: relative !important;
-                z-index: 1000 !important;
-            }
-            
-            .export-dropdown .Select-control:hover {
-                border-color: rgba(255,255,255,0.5) !important;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
-            }
-            
-            .export-dropdown .Select-control .Select-value {
-                color: white !important;
-                font-weight: 500 !important;
-                font-size: 14px !important;
-            }
-            
-            .export-dropdown .Select-control .Select-placeholder {
-                color: rgba(255,255,255,0.7) !important;
-                font-size: 14px !important;
-            }
-            
-            .export-dropdown .Select-menu-outer {
-                background-color: #042c58 !important;
-                border: 2px solid rgba(255,255,255,0.3) !important;
-                border-radius: 8px !important;
-                max-height: 200px !important;
-                overflow-y: auto !important;
-                overflow-x: hidden !important;
-                z-index: 9999 !important;
-                position: absolute !important;
-                top: 100% !important;
-                left: 0 !important;
-                right: 0 !important;
-                margin-top: 4px !important;
-                box-shadow: 0 8px 25px rgba(0,0,0,0.3) !important;
-            }
-            
-            .export-dropdown .Select-option {
-                background-color: rgba(255,255,255,0.1) !important;
-                color: white !important;
-                padding: 12px 16px !important;
-                cursor: pointer !important;
-                border-bottom: 1px solid rgba(255,255,255,0.1) !important;
-                white-space: nowrap !important;
-                overflow: hidden !important;
-                text-overflow: ellipsis !important;
-                font-size: 14px !important;
-                font-weight: 500 !important;
-                transition: all 0.2s ease !important;
-            }
-            
-            .export-dropdown .Select-option:hover {
-                background-color: rgba(255,255,255,0.2) !important;
-                transform: translateX(4px) !important;
-            }
-            
-            .export-dropdown .Select-option:last-child {
-                border-bottom: none !important;
-            }
-            
-            /* Button hover effects */
-            button:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 20px rgba(0,0,0,0.3) !important;
-            }
-            
-            /* Import area hover effects */
-            .import-upload-area:hover {
-                border-color: rgba(255,255,255,0.5) !important;
-                background-color: rgba(255,255,255,0.1) !important;
-                transform: translateY(-2px) !important;
-            }
-            
-            /* Export button hover effects */
-            button[id^="export-"]:hover {
-                transform: translateY(-2px) !important;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
-                filter: brightness(1.1) !important;
-            }
-            
-            button[id^="export-"]:active {
-                transform: translateY(0) !important;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.3) !important;
-            }
-            
-
-            
-            /* Ensure Font Awesome icons are visible */
-            .fas, .fa {
-                font-family: "Font Awesome 6 Free" !important;
-                font-weight: 900 !important;
-                display: inline-block !important;
-                font-style: normal !important;
-                font-variant: normal !important;
-                text-rendering: auto !important;
-                -webkit-font-smoothing: antialiased !important;
-                -moz-osx-font-smoothing: grayscale !important;
-            }
-            
-            /* Fallback icons if Font Awesome doesn't load */
-            .fa.fa-trash::before { content: "🗑️"; }
-            .fa.fa-save::before { content: "💾"; }
-            .fa.fa-folder-open::before { content: "📁"; }
-            
-            /* Button icon styling */
-            button .fa, button .fas {
-                font-size: 16px !important;
-                color: white !important;
-                display: inline-block !important;
-                width: auto !important;
-                height: auto !important;
-            }
-            
-            /* Delete button specific styling */
-            #delete-node-button {
-                transition: all 0.3s ease !important;
-                position: relative !important;
-                z-index: 1001 !important;
-                pointer-events: auto !important;
-                cursor: pointer !important;
-                display: block !important;
-                width: 100% !important;
-                height: auto !important;
-                min-height: 40px !important;
-                opacity: 1 !important;
-                visibility: visible !important;
-            }
-            
-            #delete-node-button:hover {
-                background-color: #c82333 !important;
-                transform: translateY(-2px) !important;
-                box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4) !important;
-            }
-            
-            #delete-node-button:active {
-                transform: translateY(0) !important;
-                box-shadow: 0 2px 10px rgba(220, 53, 69, 0.4) !important;
-            }
-            
-            #delete-node-button:focus {
-                outline: 2px solid #fff !important;
-                outline-offset: 2px !important;
-            }
-            
-            /* Size slider styling */
-            #node-size-slider {
-                z-index: 1002 !important;
-                position: relative !important;
-                pointer-events: auto !important;
-                cursor: pointer !important;
-                margin: 10px 0 !important;
-            }
-            
-            #node-size-slider .rc-slider-track {
-                background-color: #007bff !important;
-                height: 6px !important;
-                border-radius: 3px !important;
-            }
-            
-            #node-size-slider .rc-slider-rail {
-                background-color: #e9ecef !important;
-                height: 6px !important;
-                border-radius: 3px !important;
-            }
-            
-            #node-size-slider .rc-slider-handle {
-                background-color: #007bff !important;
-                border: 2px solid #fff !important;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.3) !important;
-                width: 20px !important;
-                height: 20px !important;
-                margin-top: -7px !important;
-                cursor: grab !important;
-                z-index: 1003 !important;
-            }
-            
-
-            
-            #node-size-slider .rc-slider-handle:active {
-                cursor: grabbing !important;
-                transform: scale(1.05) !important;
-            }
-            
-            #node-size-slider .rc-slider-mark {
-                color: #666 !important;
-                font-size: 12px !important;
-                font-weight: 500 !important;
-            }
-            
-            #node-size-slider .rc-slider-mark-text {
-                margin-top: 8px !important;
-            }
-            
-            /* Additional slider enhancements */
-            .size-slider {
-                width: 100% !important;
-                margin: 15px 0 !important;
-                padding: 0 10px !important;
-                box-sizing: border-box !important;
-            }
-            
-            .size-slider .rc-slider {
-                position: relative !important;
-                z-index: 1002 !important;
-            }
-            
-            .size-slider .rc-slider-rail {
-                position: absolute !important;
-                width: 100% !important;
-                background-color: #e9ecef !important;
-                height: 6px !important;
-                border-radius: 3px !important;
-                cursor: pointer !important;
-            }
-            
-            .size-slider .rc-slider-track {
-                position: absolute !important;
-                background-color: #007bff !important;
-                height: 6px !important;
-                border-radius: 3px !important;
-                cursor: pointer !important;
-            }
-            
-            .size-slider .rc-slider-handle {
-                position: absolute !important;
-                background-color: #007bff !important;
-                border: 2px solid #fff !important;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.3) !important;
-                width: 20px !important;
-                height: 20px !important;
-                margin-top: -7px !important;
-                cursor: grab !important;
-                z-index: 1003 !important;
-                transition: all 0.2s ease !important;
-            }
-            
-
-            
-            .size-slider .rc-slider-handle:active {
-                cursor: grabbing !important;
-                transform: scale(1.05) !important;
-            }
-            
-            .size-slider .rc-slider-mark {
-                position: absolute !important;
-                top: 20px !important;
-                color: #666 !important;
-                font-size: 12px !important;
-                font-weight: 500 !important;
-                cursor: pointer !important;
-            }
-            
-            .size-slider .rc-slider-mark-text {
-                cursor: pointer !important;
-            }
-            
-            /* Button container styling */
-            #node-edit-window .buttons-container {
-                margin-top: auto !important;
-                padding-top: 30px !important;
-            }
-            
-            /* Color dropdown styling */
-            #node-color-dropdown {
-                z-index: 9998 !important;
-                position: relative !important;
-                pointer-events: auto !important;
-                cursor: pointer !important;
-            }
-            
-            #node-color-dropdown .Select-control {
-                cursor: pointer !important;
-                pointer-events: auto !important;
-                z-index: 9998 !important;
-            }
-            
-            #node-color-dropdown .Select-control:hover {
-                border-color: #007bff !important;
-                box-shadow: 0 0 0 1px #007bff !important;
-            }
-            
-            #node-color-dropdown .Select-menu-outer {
-                z-index: 9999 !important;
-                position: absolute !important;
-                pointer-events: auto !important;
-                background-color: white !important;
-                border: 1px solid #ddd !important;
-                border-radius: 4px !important;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
-            }
-            
-            #node-color-dropdown .Select-option {
-                cursor: pointer !important;
-                pointer-events: auto !important;
-            }
-            
-            #node-color-dropdown .Select-option:hover {
-                background-color: #f8f9fa !important;
-            }
-            
-            /* Ensure dropdown is fully interactive */
-            #node-color-dropdown .Select {
-                position: relative !important;
-                z-index: 9998 !important;
-            }
-            
-            #node-color-dropdown .Select-control:hover {
-                border-color: #007bff !important;
-                box-shadow: 0 0 0 1px #007bff !important;
-            }
-            
-            #node-color-dropdown .Select-control:focus {
-                border-color: #007bff !important;
-                box-shadow: 0 0 0 1px #007bff !important;
-            }
-            
-            /* Label input styling */
-            #node-label-input {
-                z-index: 1002 !important;
-                position: relative !important;
-                pointer-events: auto !important;
-                cursor: text !important;
-                transition: all 0.2s ease !important;
-            }
-            
-            #node-label-input:focus {
-                border-color: #007bff !important;
-                box-shadow: 0 0 0 1px #007bff !important;
-                outline: none !important;
-            }
-            
-            #node-label-input:hover {
-                border-color: #007bff !important;
-            }
-            
-            /* Import area styling */
-            .import-upload-area {
-                transition: all 0.3s ease !important;
-                cursor: pointer !important;
-            }
-            
-            .import-upload-area:hover {
-                border-color: rgba(255,255,255,0.6) !important;
-                background-color: rgba(255,255,255,0.1) !important;
-                transform: translateY(-2px) !important;
-            }
-            
-            .import-upload-area.dragover {
-                border-color: #007bff !important;
-                background-color: rgba(0, 123, 255, 0.1) !important;
-                transform: scale(1.02) !important;
-            }
-            
-            /* File upload feedback */
-            .upload-feedback {
-                color: #28a745 !important;
-                font-size: 12px !important;
-                margin-top: 5px !important;
-                text-align: center !important;
-            }
-            
-            /* Close button styling */
-            #close-node-window {
-                cursor: pointer !important;
-                transition: all 0.2s ease !important;
-                pointer-events: auto !important;
-                z-index: 1001 !important;
-            }
-            
-            #close-node-window:hover {
-                color: #dc3545 !important;
-                transform: scale(1.1) !important;
-            }
-            
-            #close-node-window:active {
-                transform: scale(0.95) !important;
-            }
-            
-
-        </style>
     </head>
     <body>
         {%app_entry%}
@@ -428,7 +35,6 @@ app.index_string = '''
             {%scripts%}
             {%renderer%}
         </footer>
-
     </body>
 </html>
 '''
@@ -436,105 +42,46 @@ app.index_string = '''
 
 app.layout = html.Div([
     html.Div([
-        # Left Panel 
+        # Left Panel
         html.Div([
+            # Brand
             html.Div([
-                # Logo above Nodes and Relations
-                html.Div([
-                    html.I(className='fa fa-project-diagram', style={
-                        'fontSize': '28px',
-                        'color': '#007bff',
-                        'marginRight': '10px',
-                        'verticalAlign': 'middle'
-                    }),
-                    html.Span('KG Generator', style={
-                        'color': 'white',
-                        'fontSize': '24px',
-                        'fontWeight': '700',
-                        'verticalAlign': 'middle',
-                        'fontFamily': '"Red Hat Text", sans-serif'
-                    })
-                ], style={
-                    'display': 'flex',
-                    'alignItems': 'center',
-                    'marginBottom': '75px'
-                }),
-                html.H4("Nodes and Relations", style={'color': 'white', 'fontWeight': '600', 'marginBottom': '10px', 'marginTop': '0', 'fontSize': '18px'}),
-                html.Div([
-                    dcc.Input(id='node1-input', type='text', placeholder='Source node', style={
-                        'width': '48%',
-                        'padding': '8px',
-                        'border': '2px solid #ddd',
-                        'borderRadius': '4px',
-                        'boxSizing': 'border-box'
-                    }),
-                    dcc.Input(id='node2-input', type='text', placeholder='Target node', style={
-                        'width': '48%',
-                        'padding': '8px',
-                        'border': '2px solid #ddd',
-                        'borderRadius': '4px',
-                        'boxSizing': 'border-box',
-                        'marginLeft': '4%'
-                    })
-                ], style={'display': 'flex', 'justifyContent': 'space-between', 'marginBottom': '10px'}),
+                html.I(className='fa fa-project-diagram brand-icon'),
+                html.Span('KG Generator', className='brand-title')
+            ], className='brand'),
 
-                dcc.Input(id='relationship-input', type='text', placeholder='Relation', style={
-                    'width': '100%',
-                    'padding': '8px',
-                    'border': '2px solid #ddd',
-                    'borderRadius': '4px',
-                    'marginBottom': '10px',
-                    'boxSizing': 'border-box'
-                }),
-                
-                html.Button('Insert', id='add-button', style={
-                    'backgroundColor': '#95a5a6',
-                    'color': 'white',
-                    'border': 'none',
-                    'padding': '12px 16px',
-                    'borderRadius': '8px',
-                    'cursor': 'pointer',
-                    'width': '100%',
-                    'marginBottom': '10px',
-                    'fontSize': '14px',
-                    'fontWeight': '600',
-                    'boxShadow': '0 2px 8px rgba(149, 165, 166, 0.3)',
-                    'transition': 'all 0.3s ease'
-                }),
-                
-                html.Div(id='insert-error-modal', style={
-                    'position': 'fixed',
-                    'top': '50%',
-                    'left': '50%',
-                    'transform': 'translate(-50%, -50%)',
-                    'backgroundColor': '#fff',
-                    'border': '2px solid #e74c3c',
-                    'borderRadius': '8px',
-                    'padding': '20px',
-                    'boxShadow': '0 4px 20px rgba(0,0,0,0.3)',
-                    'zIndex': '1000',
-                    'display': 'none',
-                    'minWidth': '300px',
-                    'textAlign': 'center',
-                    'opacity': '0',
-                    'transition': 'opacity 0.3s ease-in-out',
-                    'fontFamily': '"Red Hat Text", sans-serif'
-                }, children=[
-                    html.Div([
-                        html.H4('Missing Required Fields', style={'color': '#e74c3c', 'margin': '0 0 10px 0', 'fontFamily': '"Red Hat Text", sans-serif'}),
-                        html.P(id='insert-error-text', style={'color': '#333', 'margin': '0', 'fontFamily': '"Red Hat Text", sans-serif'})
-                    ])
-                ]),
-                
-                # Hidden interval for auto-hiding modal
-                dcc.Interval(
-                    id='modal-timer',
-                    interval=3000,  # 3 seconds
-                    n_intervals=0,
-                    disabled=True
-                ),
-                
-                html.Label("Layout", style={'color': 'white', 'marginBottom': '10px', 'fontWeight': '600', 'fontSize': '18px'}),
+            # Nodes and Relations
+            html.Div([
+                html.H4('Nodes and Relations', className='section-title'),
+                html.Div([
+                    dcc.Input(id='node1-input', type='text', placeholder='Source node', className='text-input'),
+                    dcc.Input(id='node2-input', type='text', placeholder='Target node', className='text-input')
+                ], className='input-row'),
+                dcc.Input(id='relationship-input', type='text', placeholder='Relation', className='text-input'),
+                html.Button([
+                    html.I(className='fa fa-plus'),
+                    'Insert'
+                ], id='add-button', className='btn btn-muted')
+            ], className='sidebar-section'),
+
+            html.Div(id='insert-error-modal', className='alert-modal', style={'display': 'none'}, children=[
+                html.Div([
+                    html.H4('Missing Required Fields', className='alert-title'),
+                    html.P(id='insert-error-text', className='alert-text')
+                ])
+            ]),
+
+            # Hidden interval for auto-hiding modal
+            dcc.Interval(
+                id='modal-timer',
+                interval=3000,  # 3 seconds
+                n_intervals=0,
+                disabled=True
+            ),
+
+            # Layout
+            html.Div([
+                html.Label('Layout', className='section-title'),
                 dcc.Dropdown(
                     id='layout-dropdown',
                     options=[
@@ -546,441 +93,164 @@ app.layout = html.Div([
                         {'label': 'Klay', 'value': 'klay'}
                     ],
                     value='random',
-                    clearable=False,
-                    style={'width': '100%', 'marginBottom': '15px', 'marginTop': '12px', 'boxSizing': 'border-box'}
-                ),
-                html.Br(),
-                
-                html.Button([
-                    html.I(className='fa fa-sitemap', style={'marginRight': '8px'}),
-                    'Detect Communities'
-                ], id='cluster-button', style={
-                    'backgroundColor': '#9c27b0',
-                    'color': 'white',
-                    'border': 'none',
-                    'borderRadius': '8px',
-                    'padding': '12px 16px',
-                    'cursor': 'pointer',
-                    'width': '100%',
-                    'marginBottom': '6px',
-                    'fontSize': '14px',
-                    'fontWeight': '600',
-                    'transition': 'all 0.3s ease',
-                    'display': 'flex',
-                    'alignItems': 'center',
-                    'justifyContent': 'center',
-                    'boxShadow': '0 2px 8px rgba(156, 39, 176, 0.3)'
-                }),
-                
-                html.Button('Delete All', id='delete-all-button', style={
-                    'backgroundColor': '#e74c3c',
-                    'color': 'white',
-                    'border': 'none',
-                    'padding': '12px 16px',
-                    'borderRadius': '8px',
-                    'cursor': 'pointer',
-                    'width': '100%',
-                    'marginBottom': '6px',
-                    'fontSize': '14px',
-                    'fontWeight': '600',
-                    'display': 'flex',
-                    'alignItems': 'center',
-                    'justifyContent': 'center',
-                    'boxShadow': '0 2px 8px rgba(231, 76, 60, 0.3)',
-                    'transition': 'all 0.3s ease'
-                }),
-            ], style={
-                'padding': '12px',
-                'borderRadius': '8px',
-                'marginBottom': '6px'
-            }),
-            
+                    clearable=False
+                )
+            ], className='sidebar-section'),
+
+            # Actions
             html.Div([
+                html.Button([
+                    html.I(className='fa fa-sitemap'),
+                    'Detect Communities'
+                ], id='cluster-button', className='btn btn-primary'),
+                html.Button([
+                    html.I(className='fa fa-trash'),
+                    'Delete All'
+                ], id='delete-all-button', className='btn btn-danger-ghost')
+            ], className='sidebar-section'),
 
-                # Query Section (no heading)
+            # Query
+            html.Div([
                 html.Div([
+                    html.Label('Query', className='section-title'),
                     html.Div([
-                        dcc.Input(
-                            id='query-input',
-                            type='text',
-                            placeholder='Query',
-                            style={'width': '50%', 'padding': '8px', 'border': '2px solid #ddd', 'borderRadius': '8px', 'boxSizing': 'border-box'}
-                        ),
-                        html.Button([
-                            html.I(className='fa fa-search')
-                        ], id='query-button', style={
-                            'backgroundColor': '#3498db',
-                            'color': 'white',
-                            'border': 'none',
-                            'borderRadius': '8px',
-                            'padding': '8px 12px',
-                            'cursor': 'pointer',
-                            'width': '23%',
-                            'fontSize': '14px',
-                            'fontWeight': '700',
-                            'transition': 'all 0.3s ease',
-                            'display': 'flex',
-                            'alignItems': 'center',
-                            'justifyContent': 'center',
-                            'marginLeft': '2%'
-                        }),
-                        html.Button([
-                            html.I(className='fa fa-refresh')
-                        ], id='reset-query-button', style={
-                            'backgroundColor': '#e74c3c',
-                            'color': 'white',
-                            'border': 'none',
-                            'borderRadius': '8px',
-                            'padding': '8px 12px',
-                            'cursor': 'pointer',
-                            'width': '23%',
-                            'fontSize': '14px',
-                            'fontWeight': '700',
-                            'transition': 'all 0.3s ease',
-                            'display': 'flex',
-                            'alignItems': 'center',
-                            'justifyContent': 'center',
-                            'marginLeft': '2%'
-                        })
-                    ], style={'display': 'flex', 'alignItems': 'center', 'marginBottom': '12px'}),
-                    html.Div(id='query-results', style={
-                        'backgroundColor': 'rgba(255,255,255,0.1)',
-                        'borderRadius': '8px',
-                        'padding': '10px',
-                        'marginTop': '6px',
-                        'display': 'none'
-                    })
-                ], style={'marginBottom': '12px'}),
+                        html.I(className='fa fa-circle-info query-help-icon'),
+                        html.Div([
+                            html.P('Supported query patterns:', className='query-help-title'),
+                            html.Ul([
+                                html.Li([html.Code('connected to <entity>'), ' — all direct links']),
+                                html.Li([html.Code('neighbors of <entity>'), ' — direct neighbors only']),
+                                html.Li([html.Code('shared by <a> and <b>'), ' — common connections']),
+                                html.Li([html.Code('via <relation>'), ' — filter by edge label']),
+                                html.Li([html.Code('all'), ' / ', html.Code('reset'), ' — show everything'])
+                            ], className='query-help-list')
+                        ], className='query-help-tooltip')
+                    ], className='query-help')
+                ], className='section-title-row'),
+                html.Div([
+                    dcc.Input(id='query-input', type='text', placeholder='e.g. neighbors of X', className='text-input'),
+                    html.Button(html.I(className='fa fa-search'), id='query-button', className='btn btn-icon btn-primary'),
+                    html.Button(html.I(className='fa fa-rotate-right'), id='reset-query-button', className='btn btn-icon btn-ghost')
+                ], className='query-row'),
+                html.Div(id='query-results', className='query-results', style={'display': 'none'})
+            ], className='sidebar-section'),
 
-                # Import and Export at bottom
-                 dcc.Upload(
-                     id='import-graph',
-                     children=html.Div([
-                         html.I(className='fa fa-folder-open', style={'fontSize': '18px', 'marginRight': '8px'}),
-                         'Import RDF/JSON/XML/CSV'
-                    ], className='import-upload-area', style={
-                         'display': 'flex',
-                         'flexDirection': 'row',
-                         'alignItems': 'center',
-                         'justifyContent': 'center',
-                         'padding': '12px 16px',
-                         'border': '2px dashed rgba(255,255,255,0.3)',
-                         'borderRadius': '8px',
-                         'backgroundColor': 'rgba(255,255,255,0.05)',
-                         'color': 'white',
-                         'cursor': 'pointer',
-                         'transition': 'all 0.3s ease',
-                         'fontSize': '14px',
-                         'fontWeight': '500',
-                         'minHeight': '45px'
-                    }),
-                    style={'width': '100%', 'marginTop': '12px'},
+            # Import and Export at bottom
+            html.Div([
+                dcc.Upload(
+                    id='import-graph',
+                    children=html.Div([
+                        html.I(className='fa fa-folder-open'),
+                        'Import RDF/JSON/XML/CSV'
+                    ], className='upload-area'),
                     multiple=False,
                     accept='.xml,.rdf,.ttl,.jsonld,.json,.csv'
                 ),
-
                 html.Button([
-                    html.I(className='fa fa-download', style={'marginRight': '8px'}),
+                    html.I(className='fa fa-download'),
                     'Export'
-                ], id='export-toggle', style={
-                    'backgroundColor': 'rgba(255,255,255,0.1)',
-                    'color': 'white',
-                    'border': '2px solid rgba(255,255,255,0.3)',
-                    'borderRadius': '8px',
-                    'padding': '10px 16px',
-                    'cursor': 'pointer',
-                    'width': '100%',
-                    'fontSize': '14px',
-                    'fontWeight': '600',
-                    'transition': 'all 0.3s ease',
-                    'display': 'flex',
-                    'alignItems': 'center',
-                    'justifyContent': 'center',
-                    'marginTop': '12px'
-                }),
-                 
-                 # Delete All Confirmation
-                 html.Div([
-                     html.Div([
-                         html.H4("Confirm Delete", style={
-                             'color': '#333',
-                             'marginBottom': '15px',
-                             'fontWeight': '600'
-                         }),
-                         html.P("Are you sure you want to delete all nodes and edges?", style={
-                             'color': '#666',
-                             'marginBottom': '20px'
-                         }),
-                         html.Div([
-                             html.Button('Cancel', id='cancel-delete', style={
-                                 'backgroundColor': '#95a5a6',
-                                 'color': 'white',
-                                 'border': 'none',
-                                 'padding': '8px 16px',
-                                 'borderRadius': '4px',
-                                 'cursor': 'pointer',
-                                 'marginRight': '10px',
-                                 'fontSize': '14px'
-                             }),
-                             html.Button('Delete All', id='confirm-delete', style={
-                                 'backgroundColor': '#e74c3c',
-                                 'color': 'white',
-                                 'border': 'none',
-                                 'padding': '8px 16px',
-                                 'borderRadius': '4px',
-                                 'cursor': 'pointer',
-                                 'fontSize': '14px'
-                             })
-                         ], style={'textAlign': 'right'})
-                     ], style={
-                         'backgroundColor': 'white',
-                         'padding': '20px',
-                         'borderRadius': '8px',
-                         'boxShadow': '0 4px 12px rgba(0,0,0,0.3)',
-                         'maxWidth': '400px',
-                         'margin': 'auto'
-                     })
-                 ], id='delete-confirmation-modal', style={
-                     'position': 'fixed',
-                     'top': '0',
-                     'left': '0',
-                     'width': '100%',
-                     'height': '100%',
-                     'backgroundColor': 'rgba(0,0,0,0.5)',
-                     'display': 'none',
-                     'zIndex': 2000,
-                     'alignItems': 'center',
-                     'justifyContent': 'center'
-                 }),
-                 
-                 dcc.Download(id='download-nodes-csv'),
-                 dcc.Download(id='download-edges-csv'),
-                 dcc.Download(id='download-json'),
-                 
-             ], style={
-                'padding': '20px',
-                'paddingTop': '6px',
-                 'borderRadius': '8px'
-             }),
+                ], id='export-toggle', className='btn btn-ghost')
+            ], className='sidebar-section sidebar-bottom'),
+
+            # Delete All Confirmation
+            html.Div([
+                html.Div([
+                    html.H4('Confirm Delete', className='modal-title'),
+                    html.P('Are you sure you want to delete all nodes and edges?', className='modal-text'),
+                    html.Div([
+                        html.Button('Cancel', id='cancel-delete', className='btn btn-light'),
+                        html.Button('Delete All', id='confirm-delete', className='btn btn-danger')
+                    ], className='modal-actions')
+                ], className='modal-card')
+            ], id='delete-confirmation-modal', className='modal-backdrop', style={'display': 'none'}),
+
+            dcc.Download(id='download-nodes-csv'),
+            dcc.Download(id='download-edges-csv'),
+            dcc.Download(id='download-json'),
 
             dcc.Store(id='fullscreen-store', data=False),
-            dcc.Store(id='layout-store', data='random'),  
-            dcc.Store(id='shift-key-store', data=False),  
-            dcc.Store(id='click-timing-store', data={'last_click': None, 'click_count': 0}), 
-            
-                ], style={
-            'width': '25%',
-            'padding': '20px',
-            'height': 'calc(100vh - 40px)',
-            'overflowY': 'auto',
-            'boxSizing': 'border-box'
-        }),
-        
+            dcc.Store(id='layout-store', data='random'),
+            dcc.Store(id='shift-key-store', data=False),
+            dcc.Store(id='click-timing-store', data={'last_click': None, 'click_count': 0})
+        ], className='sidebar'),
+
         # Export Modal
         html.Div([
             html.Div([
                 html.Div([
                     html.Div([
-                        html.H3("Export Options", style={'color': 'white', 'margin': '0', 'textAlign': 'center', 'flex': '1'}),
-                        html.Button("×", id='close-export-modal', style={
-                            'background': 'none',
-                            'border': 'none',
-                            'color': 'white',
-                            'fontSize': '24px',
-                            'cursor': 'pointer',
-                            'padding': '0',
-                            'width': '30px',
-                            'height': '30px',
-                            'display': 'flex',
-                            'alignItems': 'center',
-                            'justifyContent': 'center',
-                            'borderRadius': '50%',
-                            'transition': 'all 0.3s ease'
-                        })
-                    ], style={'display': 'flex', 'alignItems': 'center', 'justifyContent': 'space-between', 'marginBottom': '20px'}),
-                    
+                        html.H3('Export Options', className='modal-title'),
+                        html.Button('×', id='close-export-modal', className='popover-close')
+                    ], className='modal-header'),
+
                     html.Div([
                         html.Button([
-                            html.I(className='fa fa-file-csv', style={'marginRight': '8px', 'color': '#27ae60'}),
+                            html.I(className='fa fa-file-csv', style={'color': '#26d07c'}),
                             'Nodes CSV'
-                        ], id='export-nodes-csv', style={
-                            'backgroundColor': 'rgba(39, 174, 96, 0.1)',
-                            'color': '#27ae60',
-                            'border': '2px solid #27ae60',
-                            'borderRadius': '8px',
-                            'padding': '12px 20px',
-                            'cursor': 'pointer',
-                            'width': '100%',
-                            'fontSize': '14px',
-                            'fontWeight': '600',
-                            'transition': 'all 0.3s ease',
-                            'display': 'flex',
-                            'alignItems': 'center',
-                            'justifyContent': 'center',
-                            'marginBottom': '10px'
-                        }),
-                        
+                        ], id='export-nodes-csv', className='btn-row'),
+
                         html.Button([
-                            html.I(className='fa fa-file-csv', style={'marginRight': '8px', 'color': '#e67e22'}),
+                            html.I(className='fa fa-file-csv', style={'color': '#ffa252'}),
                             'Edges CSV'
-                        ], id='export-edges-csv', style={
-                            'backgroundColor': 'rgba(230, 126, 34, 0.1)',
-                            'color': '#e67e22',
-                            'border': '2px solid #e67e22',
-                            'borderRadius': '8px',
-                            'padding': '12px 20px',
-                            'cursor': 'pointer',
-                            'width': '100%',
-                            'fontSize': '14px',
-                            'fontWeight': '600',
-                            'transition': 'all 0.3s ease',
-                            'display': 'flex',
-                            'alignItems': 'center',
-                            'justifyContent': 'center',
-                            'marginBottom': '10px'
-                        }),
-                        
+                        ], id='export-edges-csv', className='btn-row'),
+
                         html.Button([
-                            html.I(className='fa fa-file-image', style={'marginRight': '8px', 'color': '#9b59b6'}),
+                            html.I(className='fa fa-file-image', style={'color': '#6ab2e7'}),
                             'PNG Image'
-                        ], id='export-png', style={
-                            'backgroundColor': 'rgba(155, 89, 182, 0.1)',
-                            'color': '#9b59b6',
-                            'border': '2px solid #9b59b6',
-                            'borderRadius': '8px',
-                            'padding': '12px 20px',
-                            'cursor': 'pointer',
-                            'width': '100%',
-                            'fontSize': '14px',
-                            'fontWeight': '600',
-                            'transition': 'all 0.3s ease',
-                            'display': 'flex',
-                            'alignItems': 'center',
-                            'justifyContent': 'center',
-                            'marginBottom': '10px'
-                        }),
-                        
+                        ], id='export-png', className='btn-row'),
+
                         html.Button([
-                            html.I(className='fa fa-file-image', style={'marginRight': '8px', 'color': '#e74c3c'}),
+                            html.I(className='fa fa-file-image', style={'color': '#e31b4c'}),
                             'JPEG Image'
-                        ], id='export-jpeg', style={
-                            'backgroundColor': 'rgba(231, 76, 60, 0.1)',
-                            'color': '#e74c3c',
-                            'border': '2px solid #e74c3c',
-                            'borderRadius': '8px',
-                            'padding': '12px 20px',
-                            'cursor': 'pointer',
-                            'width': '100%',
-                            'fontSize': '14px',
-                            'fontWeight': '600',
-                            'transition': 'all 0.3s ease',
-                            'display': 'flex',
-                            'alignItems': 'center',
-                            'justifyContent': 'center',
-                            'marginBottom': '10px'
-                        }),
-                        
+                        ], id='export-jpeg', className='btn-row'),
+
                         html.Button([
-                            html.I(className='fa fa-file-code', style={'marginRight': '8px', 'color': '#3498db'}),
+                            html.I(className='fa fa-file-code', style={'color': '#4c3575'}),
                             'JSON Export'
-                        ], id='export-json', style={
-                            'backgroundColor': 'rgba(52, 152, 219, 0.1)',
-                            'color': '#3498db',
-                            'border': '2px solid #3498db',
-                            'borderRadius': '8px',
-                            'padding': '12px 20px',
-                            'cursor': 'pointer',
-                            'width': '100%',
-                            'fontSize': '14px',
-                            'fontWeight': '600',
-                            'transition': 'all 0.3s ease',
-                            'display': 'flex',
-                            'alignItems': 'center',
-                            'justifyContent': 'center',
-                            'marginBottom': '0'
-                        })
-                    ])
-                ], style={
-                    'backgroundColor': '#34495e',
-                    'padding': '30px',
-                    'borderRadius': '12px',
-                    'boxShadow': '0 8px 32px rgba(0,0,0,0.3)',
-                    'maxWidth': '400px',
-                    'width': '90%'
-                })
-            ], style={
-                'position': 'fixed',
-                'top': 0,
-                'left': 0,
-                'width': '100%',
-                'height': '100%',
-                'backgroundColor': 'rgba(0,0,0,0.7)',
-                'display': 'flex',
-                'alignItems': 'center',
-                'justifyContent': 'center',
-                'zIndex': 1000
-            })
+                        ], id='export-json', className='btn-row')
+                    ], className='export-options')
+                ], className='modal-card')
+            ], className='modal-backdrop')
         ], id='export-modal', style={'display': 'none'}),
-        
+
         # Right Panel
         html.Div([
-            # Fullscreen button 
+            # Fullscreen button
             html.Button(
-                '⛶', 
+                html.I(className='fa fa-expand'),
                 id='fullscreen-btn',
-                style={
-                    'position': 'absolute',
-                    'top': '30px',
-                    'right': '30px',
-                    'backgroundColor': 'rgba(0,0,0,0.7)',
-                    'color': 'white',
-                    'border': 'none',
-                    'padding': '8px',
-                    'borderRadius': '50%',
-                    'cursor': 'pointer',
-                    'width': '40px',
-                    'height': '40px',
-                    'fontSize': '18px',
-                    'zIndex': 1000,
-                    'display': 'flex',
-                    'alignItems': 'center',
-                    'justifyContent': 'center',
-                    'transition': 'background-color 0.3s ease'
-                }
+                className='canvas-fab'
             ),
-            
+
             # Graph container
             html.Div([
                 cyto.Cytoscape(
-                    id='cytoscape-graph',            
+                    id='cytoscape-graph',
                     layout={'name': 'random', 'fit': True, 'animate': True, 'padding': 30},
                     style={
-                        'width': '100%', 
-                        'height': 'calc(100vh - 60px)', 
+                        'width': '100%',
+                        'height': '100%',
                         'background': '#fff',
-                        'position': 'static',
-                        'minHeight': '600px',
-                        'boxSizing': 'border-box',
-                        'borderRadius': '12px'
-                    },  
-                    elements=[],                         
+                        'minHeight': '500px'
+                    },
+                    elements=[],
                     zoom=1.0,
                     generateImage={'type': 'png', 'action': 'store'},
                     # Multi selection
                     boxSelectionEnabled=True,
 
-                    stylesheet=[                        
+                    stylesheet=[
                         {
-                            'selector': 'node',         
+                            'selector': 'node',
                             'style': {
-                                'label': 'data(label)',     
-                                'font-size': 18,            
-                                'text-valign': 'center',     
-                                'text-halign': 'center',     
+                                'label': 'data(label)',
+                                'font-size': 18,
+                                'text-valign': 'center',
+                                'text-halign': 'center',
                                 'background-color': 'data(color)',
-                                'color': '#000',             
-                                'width': 'data(size)',                 
-                                'height': 'data(size)',                
+                                'color': '#000',
+                                'width': 'data(size)',
+                                'height': 'data(size)',
                             }
                         },
                         {
@@ -988,25 +258,25 @@ app.layout = html.Div([
                             'style': {
                                 'background-color': 'data(color)',
                                 'border-width': 4,
-                                'border-color': '#ff6b6b',
-                                'border-opacity': 0.8,
+                                'border-color': '#042c58',
+                                'border-opacity': 0.9,
                                 'width': 'data(size)',
                                 'height': 'data(size)'
                             }
                         },
                         {
-                            'selector': 'edge',          
+                            'selector': 'edge',
                             'style': {
-                                'label': 'data(label)',         
-                                'font-size': 18,                
-                                'text-background-color': '#fff', 
-                                'text-background-opacity': 1,    
+                                'label': 'data(label)',
+                                'font-size': 18,
+                                'text-background-color': '#fff',
+                                'text-background-opacity': 1,
                                 'text-background-padding': '4px',
                                 'target-arrow-shape': 'triangle',
-                                'target-arrow-color': '#000',    
-                                'line-color': '#000',            
-                                'width': 2,                      
-                                'curve-style': 'bezier',         
+                                'target-arrow-color': '#000',
+                                'line-color': '#000',
+                                'width': 2,
+                                'curve-style': 'bezier',
                             }
                         },
                         {
@@ -1053,269 +323,104 @@ app.layout = html.Div([
                         }
                     ]
                 ),
-        # Node edit window 
-        html.Div([
-            # click-outside-to-close
-            html.Div(id='node-edit-backdrop', style={
-                'position': 'fixed',
-                'top': '0',
-                'left': '0',
-                'width': '100%',
-                'height': '100%',
-                'backgroundColor': 'transparent',
-                'zIndex': 999,
-                'display': 'none'
-            }),
-            html.Div([
-                html.Div([
-                    html.H3("Edit Node", style={'margin': '0', 'color': '#333', 'flex': '1'}),
-                    html.Button("×", id='close-node-window', style={
-                        'background': 'none',
-                        'border': 'none',
-                        'fontSize': '24px',
-                        'cursor': 'pointer',
-                        'color': '#999',
-                        'padding': '0',
-                        'width': '30px',
-                        'height': '30px',
-                        'display': 'flex',
-                        'alignItems': 'center',
-                        'justifyContent': 'center'
-                    })
-                ], style={'display': 'flex', 'justifyContent': 'space-between', 'alignItems': 'center', 'marginBottom': '15px'}),
-                html.Div([
-                    html.Label("Label:", style={'fontWeight': 'bold', 'marginBottom': '5px'}),
-                    dcc.Input(
-                        id='node-label-input',
-                        type='text',
-                        placeholder='Enter node label',
-                        debounce=True,
-                        style={'width': '100%', 'padding': '8px', 'border': '1px solid #ddd', 'borderRadius': '4px', 'marginBottom': '15px', 'boxSizing': 'border-box'}
-                    ),
-                    html.Label("Color:", style={'fontWeight': 'bold', 'marginBottom': '5px'}),
-                    dcc.Dropdown(
-                        id='node-color-dropdown',
-                        options=[
-                            {'label': 'Light Blue', 'value': '#87cefa'},
-                            {'label': 'Red', 'value': '#ff6b6b'},
-                            {'label': 'Green', 'value': '#51cf66'},
-                            {'label': 'Yellow', 'value': '#ffd43b'},
-                            {'label': 'Purple', 'value': '#cc5de8'},
-                            {'label': 'Orange', 'value': '#ff922b'},
-                            {'label': 'Pink', 'value': '#f06595'},
-                            {'label': 'Gray', 'value': '#868e96'}
-                        ],
-                        value='#87cefa',
-                        clearable=False,
-                        style={'width': '100%', 'marginBottom': '15px'}
-                    ),
-                    html.Label("Size:", style={'fontWeight': 'bold', 'marginBottom': '5px'}),
-                    dcc.Slider(
-                        id='node-size-slider',
-                        min=20,
-                        max=100,
-                        step=5,
-                        value=30,
-                        marks={20: '20', 30: '30', 50: '50', 70: '70', 100: '100'},
-                        tooltip={'placement': 'bottom', 'always_visible': True},
-                        updatemode='drag',
-                        included=True,
-                        className='size-slider'
-                    ),
-                    
-                    # Buttons container at bottom
-                    html.Div([
-                        html.Button('Hide Node', id='hide-node-button', n_clicks=0, style={
-                            'backgroundColor': '#6c757d',
-                            'color': 'white',
-                            'border': 'none',
-                            'padding': '6px 16px',
-                            'borderRadius': '4px',
-                            'cursor': 'pointer',
-                            'width': '100%',
-                            'marginBottom': '6px',
-                            'position': 'relative',
-                            'zIndex': 1001,
-                            'pointerEvents': 'auto',
-                            'fontSize': '14px',
-                            'fontWeight': 'bold',
-                            'height': '40px'
-                        }),
-                        html.Button('Delete Node', id='delete-node-button', n_clicks=0, style={
-                            'backgroundColor': '#dc3545',
-                            'color': 'white',
-                            'border': 'none',
-                            'padding': '6px 16px',
-                            'borderRadius': '4px',
-                            'cursor': 'pointer',
-                            'width': '100%',
-                            'marginTop': '6px',
-                            'position': 'relative',
-                            'zIndex': 1001,
-                            'pointerEvents': 'auto',
-                            'userSelect': 'none',
-                            'outline': 'none',
-                            'fontSize': '14px',
-                            'fontWeight': 'bold',
-                            'height': '40px'
-                        })
-                    ], style={'marginTop': 'auto'}, className='buttons-container')
-                ])
-            ], style={
-                'backgroundColor': 'white',
-                'border': '1px solid #ccc',
-                'borderRadius': '8px',
-                'padding': '20px',
-                'boxShadow': '0 4px 12px rgba(0,0,0,0.15)',
-                'minWidth': '280px',
-                'maxWidth': '320px',
-                'height': '400px',
-                'display': 'flex',
-                'flexDirection': 'column',
-                'justifyContent': 'space-between'
-            })
-        ], id='node-edit-window', style={
-            'position': 'absolute',
-            'top': '10px',
-            'left': '10px',
-            'zIndex': 9999,
-            'display': 'none'
-        }),
-        
-        # Edge edit window
-        html.Div([
-            # click-outside-to-close
-            html.Div(id='edge-edit-backdrop', style={
-                'position': 'fixed',
-                'top': '0',
-                'left': '0',
-                'width': '100%',
-                'height': '100%',
-                'backgroundColor': 'transparent',
-                'zIndex': 999,
-                'display': 'none'
-            }),
-            html.Div([
-                html.Div([
-                    html.H3("Edit Edge", style={'margin': '0', 'color': '#333', 'flex': '1'}),
-                    html.Button("×", id='close-edge-window', style={
-                        'background': 'none',
-                        'border': 'none',
-                        'fontSize': '24px',
-                        'cursor': 'pointer',
-                        'color': '#999',
-                        'padding': '0',
-                        'width': '30px',
-                        'height': '30px',
-                        'display': 'flex',
-                        'alignItems': 'center',
-                        'justifyContent': 'center'
-                    })
-                ], style={'display': 'flex', 'justifyContent': 'space-between', 'alignItems': 'center', 'marginBottom': '15px'}),
-                html.Div([
-                    html.Label("Label:", style={'fontWeight': 'bold', 'marginBottom': '5px'}),
-                    dcc.Input(
-                        id='edge-label-input',
-                        type='text',
-                        placeholder='Enter edge label',
-                        debounce=True,
-                        style={'width': '100%', 'padding': '8px', 'border': '1px solid #ddd', 'borderRadius': '4px', 'marginBottom': '15px'}
-                    ),
-                    html.Button('Delete Edge', id='delete-edge-button', n_clicks=0, style={
-                        'backgroundColor': '#dc3545',
-                        'color': 'white',
-                        'border': 'none',
-                        'padding': '8px 16px',
-                        'borderRadius': '4px',
-                        'cursor': 'pointer',
-                        'width': '100%',
-                        'marginTop': '10px'
-                    })
 
-                ])
-            ], style={
-                'backgroundColor': 'white',
-                'border': '1px solid #ccc',
-                'borderRadius': '8px',
-                'padding': '20px',
-                'boxShadow': '0 4px 12px rgba(0,0,0,0.15)',
-                'minWidth': '250px',
-                'maxWidth': '300px',
-                'maxHeight': '80vh',
-                'overflowY': 'auto'
-            })
-        ], id='edge-edit-window', style={
-            'position': 'absolute',
-            'top': '10px',
-            'left': '10px',
-            'zIndex': 1000,
-            'display': 'none'
-        })
-    ], id='graph-container', style={'position': 'relative', 'width': '100%'})
-    ], style={
-        'width': '75%',
-        'marginLeft': '20px',
-        'marginRight': '20px',
-        'marginTop': '20px',
-        'height': 'calc(100vh - 40px)',
-        'overflow': 'hidden',
-        'boxSizing': 'border-box'
-    })
-    ], style={
-        'display': 'flex',
-        'height': 'calc(100vh - 40px)',
-        'overflow': 'hidden',
-        'boxSizing': 'border-box'
-    })
-], style={
-    'backgroundColor': '#042c58', 
-    'minHeight': '100vh',
-    'maxHeight': '100vh',
-    'overflow': 'hidden',
-    'boxSizing': 'border-box',
-    'fontFamily': '"Red Hat Text", sans-serif'
-})
+                # Node edit window
+                html.Div([
+                    # click-outside-to-close
+                    html.Div(id='node-edit-backdrop', className='edit-backdrop', style={'display': 'none'}),
+                    html.Div([
+                        html.Div([
+                            html.H3('Edit Node', className='popover-title'),
+                            html.Button('×', id='close-node-window', className='popover-close')
+                        ], className='popover-header'),
+                        html.Div([
+                            html.Label('Label:', className='field-label'),
+                            dcc.Input(
+                                id='node-label-input',
+                                type='text',
+                                placeholder='Enter node label',
+                                debounce=True,
+                                className='light-input'
+                            ),
+                            html.Label('Color:', className='field-label'),
+                            dcc.Dropdown(
+                                id='node-color-dropdown',
+                                options=[
+                                    {'label': 'Light Blue', 'value': '#87cefa'},
+                                    {'label': 'Red', 'value': '#ff6b6b'},
+                                    {'label': 'Green', 'value': '#51cf66'},
+                                    {'label': 'Yellow', 'value': '#ffd43b'},
+                                    {'label': 'Purple', 'value': '#cc5de8'},
+                                    {'label': 'Orange', 'value': '#ff922b'},
+                                    {'label': 'Pink', 'value': '#f06595'},
+                                    {'label': 'Gray', 'value': '#868e96'}
+                                ],
+                                value='#87cefa',
+                                clearable=False,
+                                style={'marginBottom': '14px'}
+                            ),
+                            html.Label('Size:', className='field-label'),
+                            dcc.Slider(
+                                id='node-size-slider',
+                                min=20,
+                                max=100,
+                                step=5,
+                                value=30,
+                                marks={20: '20', 30: '30', 50: '50', 70: '70', 100: '100'},
+                                tooltip={'placement': 'bottom', 'always_visible': True},
+                                updatemode='drag',
+                                included=True,
+                                className='size-slider'
+                            ),
+
+                            # Buttons container at bottom
+                            html.Div([
+                                html.Button('Hide Node', id='hide-node-button', n_clicks=0, className='btn btn-light'),
+                                html.Button('Delete Node', id='delete-node-button', n_clicks=0, className='btn btn-danger')
+                            ], className='buttons-container')
+                        ])
+                    ], className='popover-card')
+                ], id='node-edit-window', className='popover-wrap', style={'display': 'none'}),
+
+                # Edge edit window
+                html.Div([
+                    # click-outside-to-close
+                    html.Div(id='edge-edit-backdrop', className='edit-backdrop', style={'display': 'none'}),
+                    html.Div([
+                        html.Div([
+                            html.H3('Edit Edge', className='popover-title'),
+                            html.Button('×', id='close-edge-window', className='popover-close')
+                        ], className='popover-header'),
+                        html.Div([
+                            html.Label('Label:', className='field-label'),
+                            dcc.Input(
+                                id='edge-label-input',
+                                type='text',
+                                placeholder='Enter edge label',
+                                debounce=True,
+                                className='light-input'
+                            ),
+                            html.Button('Delete Edge', id='delete-edge-button', n_clicks=0, className='btn btn-danger')
+                        ])
+                    ], className='popover-card')
+                ], id='edge-edit-window', className='popover-wrap', style={'display': 'none'})
+            ], id='graph-container')
+        ], className='canvas-panel')
+    ], className='app-shell')
+], className='app-root')
 
 # Validate input fields for Insert button styling
 @app.callback(
-    Output('add-button', 'style'),
+    Output('add-button', 'className'),
     [Input('node1-input', 'value'),
      Input('node2-input', 'value'),
      Input('relationship-input', 'value')]
 )
 def validate_insert_inputs(node1, node2, relationship):
-    all_filled = node1 and node2 and relationship
-    
-    if all_filled:
-        return {
-            'backgroundColor': '#27ae60',
-            'color': 'white',
-            'border': 'none',
-            'padding': '12px 16px',
-            'borderRadius': '8px',
-            'cursor': 'pointer',
-            'width': '100%',
-            'marginBottom': '10px',
-            'fontSize': '14px',
-            'fontWeight': '600',
-            'boxShadow': '0 2px 8px rgba(39, 174, 96, 0.3)',
-            'transition': 'all 0.3s ease'
-        }
-    else:
-        return {
-            'backgroundColor': '#95a5a6',
-            'color': 'white',
-            'border': 'none',
-            'padding': '12px 16px',
-            'borderRadius': '8px',
-            'cursor': 'pointer',
-            'width': '100%',
-            'marginBottom': '10px',
-            'fontSize': '14px',
-            'fontWeight': '600',
-            'boxShadow': '0 2px 8px rgba(149, 165, 166, 0.3)',
-            'transition': 'all 0.3s ease'
-        }
+    if node1 and node2 and relationship:
+        return 'btn btn-success'
+    return 'btn btn-muted'
+
 # Handle error modal for insert button
 @app.callback(
     Output('insert-error-modal', 'style'),
@@ -1339,24 +444,7 @@ def handle_insert_error(add_clicks, node1, node2, relationship):
     # Generic error message for any missing fields
     error_msg = "Please fill out all required fields"
     
-    return {
-        'position': 'fixed',
-        'top': '50%',
-        'left': '50%',
-        'transform': 'translate(-50%, -50%)',
-        'backgroundColor': '#fff',
-        'border': '2px solid #e74c3c',
-        'borderRadius': '8px',
-        'padding': '20px',
-        'boxShadow': '0 4px 20px rgba(0,0,0,0.3)',
-        'zIndex': '1000',
-        'display': 'block',
-        'minWidth': '300px',
-        'textAlign': 'center',
-        'opacity': '1',
-        'transition': 'opacity 0.3s ease-in-out',
-        'fontFamily': '"Red Hat Text", sans-serif'
-    }, error_msg, False
+    return {'display': 'block', 'opacity': '1', 'pointerEvents': 'auto'}, error_msg, False
 
 # Auto-hide modal when timer fires
 @app.callback(
@@ -1367,24 +455,7 @@ def handle_insert_error(add_clicks, node1, node2, relationship):
 )
 def auto_hide_modal(n_intervals):
     if n_intervals > 0:
-        return {
-            'position': 'fixed',
-            'top': '50%',
-            'left': '50%',
-            'transform': 'translate(-50%, -50%)',
-            'backgroundColor': '#fff',
-            'border': '2px solid #e74c3c',
-            'borderRadius': '8px',
-            'padding': '20px',
-            'boxShadow': '0 4px 20px rgba(0,0,0,0.3)',
-            'zIndex': '1000',
-            'display': 'block',
-            'minWidth': '300px',
-            'textAlign': 'center',
-            'opacity': '0',
-            'transition': 'opacity 0.3s ease-in-out',
-            'fontFamily': '"Red Hat Text", sans-serif'
-        }, True
+        return {'display': 'block', 'opacity': '0', 'pointerEvents': 'none'}, True
     return dash.no_update, dash.no_update
 
 # Insert, Delete All, Import, Auto-update node/edge 
@@ -1651,13 +722,7 @@ def export_json(n_clicks, elements):
 )
 def close_window_after_delete(delete_clicks, selected_node):
     if delete_clicks and selected_node:
-        return {
-            'position': 'absolute',
-            'top': '10px',
-            'left': '10px',
-            'zIndex': 1000,
-            'display': 'none'
-        }
+        return {'display': 'none'}
     return dash.no_update
 
 
@@ -1934,33 +999,15 @@ def toggle_node_edit_window(node_data, close_clicks, edge_data, click_timing):
     print(f"DEBUG: edge_data: {edge_data}")
     
     if not ctx.triggered:
-        return {
-            'position': 'absolute',
-            'top': '10px',
-            'left': '10px',
-            'zIndex': 1000,
-            'display': 'none'
-        }
+        return {'display': 'none'}
     
     button_id = ctx.triggered[0]['prop_id'].split('.')[0]
     print(f"DEBUG: Button ID: {button_id}")
     
     if button_id == 'close-node-window':
-        return {
-            'position': 'absolute',
-            'top': '10px',
-            'left': '10px',
-            'zIndex': 1000,
-            'display': 'none'
-        }
+        return {'display': 'none'}
     elif button_id == 'cytoscape-graph' and 'tapEdge' in ctx.triggered[0]['prop_id']:
-        return {
-            'position': 'absolute',
-            'top': '10px',
-            'left': '10px',
-            'zIndex': 1000,
-            'display': 'none'
-        }
+        return {'display': 'none'}
     elif node_data is not None:
         import time
         current_time = time.time()
@@ -1978,38 +1025,13 @@ def toggle_node_edit_window(node_data, close_clicks, edge_data, click_timing):
             print(f"DEBUG: Single-click detected on node: {node_data}")
         
         if not is_double_click:
-            return {
-                'position': 'absolute',
-                'top': '10px',
-                'left': '10px',
-                'zIndex': 1000,
-                'display': 'none'
-            }
+            return {'display': 'none'}
         
         print(f"DEBUG: Opening edit window for double-click")
-        graph_width = 1200  
-        graph_height = 800 
-        window_width = 320 
-        window_height = 400 
         
-        window_x = (graph_width - window_width) // 2
-        window_y = (graph_height - window_height) // 2
-        
-        return {
-            'position': 'absolute',
-            'top': f'{window_y}px',
-            'left': f'{window_x}px',
-            'zIndex': 9999,
-            'display': 'block'
-        }
+        return {'display': 'block'}
     else:
-        return {
-            'position': 'absolute',
-            'top': '10px',
-            'left': '10px',
-            'zIndex': 1000,
-            'display': 'none'
-        }
+        return {'display': 'none'}
 
 # Show/hide edge edit window when edge is clicked
 @app.callback(
@@ -2022,59 +1044,19 @@ def toggle_node_edit_window(node_data, close_clicks, edge_data, click_timing):
 def toggle_edge_edit_window(edge_data, close_clicks, delete_clicks, node_data):
     ctx = dash.callback_context
     if not ctx.triggered:
-        return {
-            'position': 'absolute',
-            'top': '10px',
-            'left': '10px',
-            'zIndex': 1000,
-            'display': 'none'
-        }
+        return {'display': 'none'}
     
     button_id = ctx.triggered[0]['prop_id'].split('.')[0]
     
     if button_id in ['close-edge-window', 'delete-edge-button']:
-        return {
-            'position': 'absolute',
-            'top': '10px',
-            'left': '10px',
-            'zIndex': 1000,
-            'display': 'none'
-        }
+        return {'display': 'none'}
     elif button_id == 'cytoscape-graph' and 'tapNode' in ctx.triggered[0]['prop_id']:
-        return {
-            'position': 'absolute',
-            'top': '10px',
-            'left': '10px',
-            'zIndex': 1000,
-            'display': 'none'
-        }
+        return {'display': 'none'}
     elif edge_data is not None:
-        graph_width = 1200  
-        graph_height = 800  
-        window_width = 300  
-        window_height = 200  
         
-        window_x = (graph_width - window_width) // 2
-        window_y = (graph_height - window_height) // 2
-        
-        window_x = max(10, min(window_x, graph_width - window_width - 10))
-        window_y = max(10, min(window_y, graph_height - window_height - 10))
-        
-        return {
-            'position': 'absolute',
-            'top': f'{window_y}px',
-            'left': f'{window_x}px',
-            'zIndex': 1000,
-            'display': 'block'
-        }
+        return {'display': 'block'}
     else:
-        return {
-            'position': 'absolute',
-            'top': '10px',
-            'left': '10px',
-            'zIndex': 1000,
-            'display': 'none'
-        }
+        return {'display': 'none'}
 
 # Fullscreen
 app.clientside_callback(
@@ -2186,18 +1168,7 @@ def toggle_delete_modal(delete_clicks, cancel_clicks, confirm_clicks):
     button_id = ctx.triggered[0]['prop_id'].split('.')[0]
     
     if button_id == 'delete-all-button':
-        return {
-            'position': 'fixed',
-            'top': '0',
-            'left': '0',
-            'width': '100%',
-            'height': '100%',
-            'backgroundColor': 'rgba(0,0,0,0.5)',
-            'display': 'flex',
-            'zIndex': 2000,
-            'alignItems': 'center',
-            'justifyContent': 'center'
-        }
+        return {'display': 'flex'}
     elif button_id in ['cancel-delete', 'confirm-delete']:
         return {'display': 'none'}
     
@@ -2221,13 +1192,7 @@ def confirm_delete_all(confirm_clicks):
 )
 def close_node_window_on_backdrop_click(backdrop_clicks):
     if backdrop_clicks:
-        return {
-            'position': 'absolute',
-            'top': '10px',
-            'left': '10px',
-            'zIndex': 1000,
-            'display': 'none'
-        }
+        return {'display': 'none'}
     return dash.no_update
 
 @app.callback(
@@ -2237,13 +1202,7 @@ def close_node_window_on_backdrop_click(backdrop_clicks):
 )
 def close_edge_window_on_backdrop_click(backdrop_clicks):
     if backdrop_clicks:
-        return {
-            'position': 'absolute',
-            'top': '10px',
-            'left': '10px',
-            'zIndex': 1000,
-            'display': 'none'
-        }
+        return {'display': 'none'}
     return dash.no_update
 
 @app.callback(
@@ -2264,16 +1223,7 @@ def toggle_node_edit_backdrop(node_data, close_clicks, edge_data):
     elif button_id == 'cytoscape-graph' and 'tapEdge' in ctx.triggered[0]['prop_id']:
         return {'display': 'none'}
     elif node_data is not None:
-        return {
-            'position': 'fixed',
-            'top': '0',
-            'left': '0',
-            'width': '100%',
-            'height': '100%',
-            'backgroundColor': 'transparent',
-            'zIndex': 999,
-            'display': 'block'
-        }
+        return {'display': 'block'}
     else:
         return {'display': 'none'}
 
@@ -2296,16 +1246,7 @@ def toggle_edge_edit_backdrop(edge_data, close_clicks, delete_clicks, node_data)
     elif button_id == 'cytoscape-graph' and 'tapNode' in ctx.triggered[0]['prop_id']:
         return {'display': 'none'}
     elif edge_data is not None:
-        return {
-            'position': 'fixed',
-            'top': '0',
-            'left': '0',
-            'width': '100%',
-            'height': '100%',
-            'backgroundColor': 'transparent',
-            'zIndex': 999,
-            'display': 'block'
-        }
+        return {'display': 'block'}
     else:
         return {'display': 'none'}
 
@@ -2829,4 +1770,4 @@ def reset_query(n_clicks, elements):
     return new_elements
     
 if __name__ == '__main__':
-    app.run_server(host='localhost', port=8080, debug=False) 
+    app.run(host='localhost', port=8080, debug=False)
