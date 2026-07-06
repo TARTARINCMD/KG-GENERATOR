@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Knowledge Graph Visualization Tool
+=======
+# Knowledge Graph Visualization Tool :DD
+>>>>>>> origin/main
 
 A web-based application for creating, editing, and visualizing knowledge graphs using Dash and Cytoscape.js.
 

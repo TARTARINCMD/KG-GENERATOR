@@ -1232,16 +1232,17 @@ def toggle_node_edit_backdrop(node_data, close_clicks, edge_data):
     [Input('cytoscape-graph', 'tapEdge'),
      Input('close-edge-window', 'n_clicks'),
      Input('delete-edge-button', 'n_clicks'),
-     Input('cytoscape-graph', 'tapNode')]
+     Input('cytoscape-graph', 'tapNode'),
+     Input('edge-edit-backdrop', 'n_clicks')]
 )
-def toggle_edge_edit_backdrop(edge_data, close_clicks, delete_clicks, node_data):
+def toggle_edge_edit_backdrop(edge_data, close_clicks, delete_clicks, node_data, backdrop_clicks):
     ctx = dash.callback_context
     if not ctx.triggered:
         return {'display': 'none'}
-    
+
     button_id = ctx.triggered[0]['prop_id'].split('.')[0]
-    
-    if button_id in ['close-edge-window', 'delete-edge-button']:
+
+    if button_id in ['close-edge-window', 'delete-edge-button', 'edge-edit-backdrop']:
         return {'display': 'none'}
     elif button_id == 'cytoscape-graph' and 'tapNode' in ctx.triggered[0]['prop_id']:
         return {'display': 'none'}
