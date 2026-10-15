@@ -2,7 +2,20 @@
 
 A browser-based knowledge graph editor built with Dash and Cytoscape.js — create, edit, query, and visualize node-relation graphs interactively, without writing any code.
 
-This project was built as part of an HCI (Human-Computer Interaction) course, exploring interaction design for a genuinely useful data/research tool.
+This project was built as part of an HCI  course, exploring interaction design for a genuinely useful data/research tool.
+
+## Interface
+
+![Force-directed layout of a larger graph, with communities color-coded](assets/screenshots/kg-2.png)
+*Force-directed layout of a larger graph after running community detection.*
+
+| Node editing | Pattern query |
+|---|---|
+| ![Edit Node panel with label, color, and size controls](assets/screenshots/kg-1.png) | ![Query "connected to F" highlighting F and its neighbors](assets/screenshots/kg-3.png) |
+| Double-click a node to change its label, color, and size, or to hide or delete it. | The query `connected to F` highlights F and its direct connections and dims the rest. |
+
+![Export options dialog](assets/screenshots/kg-4.png)
+*Export the graph as Nodes CSV, Edges CSV, PNG, JPEG, or JSON.*
 
 ## Features
 
@@ -20,13 +33,13 @@ This project was built as part of an HCI (Human-Computer Interaction) course, ex
 
 ## Tech Stack
 
-- **Python** — application logic
-- **Dash** (Plotly) — web app framework and reactive callbacks
-- **Dash Cytoscape** — interactive graph rendering and layout engine
-- **RDFlib** — RDF/OWL/JSON-LD parsing and serialization
-- **NetworkX** — graph algorithms (community detection, connectivity checks)
-- **Pandas** — CSV import/export
-- **HTML/CSS** — custom design system (RPTU brand palette)
+- **Python** - application logic
+- **Dash** (Plotly) - web app framework and reactive callbacks
+- **Dash Cytoscape** - interactive graph rendering and layout engine
+- **RDFlib** - RDF/OWL/JSON-LD parsing and serialization
+- **NetworkX** - graph algorithms (community detection, connectivity checks)
+- **Pandas** - CSV import/export
+- **HTML/CSS** - custom design system (RPTU brand palette)
 
 ## Prerequisites
 
